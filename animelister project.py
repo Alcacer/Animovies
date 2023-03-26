@@ -32,7 +32,7 @@ class AniMovieLister(Tk):
         help_menu = Menu(self, tearoff=0)
         contact = Menu(self, tearoff=0)
         contact.add_command(label="Linkedin",
-                            command=lambda: open_new("https://www.linkedin.com/in/akpos-iyaga-845981203/"))
+                            command=lambda: open_new("https://www.linkedin.com/in/alcacer/"))
         contact.add_separator()
         contact.add_command(label="Github", command=lambda: open_new("https://github.com/Alcacer/"))
         help_menu.add_cascade(label="Contact", menu=contact)
