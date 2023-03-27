@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
+from threading import Thread
 from webbrowser import open_new
 from backend import *
 
@@ -45,32 +46,42 @@ class AniMovieLister(Tk):
         body.pack(side=RIGHT, fill=BOTH, expand=TRUE)
         body.grid_rowconfigure(0, weight=1)
         body.grid_columnconfigure(0, weight=1)
+        self.body = body
 
         # Adding the tabs to the Sidebar
         sidebutton0 = Button(sidebar, text="Home", bg="gray", relief=SUNKEN, width=9, height=7,
-                             command=lambda: self.show_page(Home))
+                             command=lambda: self.show_page("home"))
         sidebutton0.grid(row=0, pady=1, padx=5)
         sidebutton1 = Button(sidebar, text="Anime", bg="gray", relief=SUNKEN, width=9, height=7,
-                             command=lambda: self.show_page(Anime))
+                             command=lambda: self.show_page("anime"))
         sidebutton1.grid(row=1, pady=1, padx=5)
         sidebutton2 = Button(sidebar, text="Movies", bg="gray", relief=SUNKEN, width=9, height=7,
-                             command=lambda: self.show_page(Movies))
+                             command=lambda: self.show_page("movies"))
         sidebutton2.grid(row=2, pady=1, padx=5)
         sidebutton3 = Button(sidebar, text="Series", bg="gray", relief=SUNKEN, width=9, height=7,
-                             command=lambda: self.show_page(Series))
+                             command=lambda: self.show_page("series"))
         sidebutton3.grid(row=3, pady=1, padx=5)
         sidebutton4 = Button(sidebar, text="Cartoons", bg="gray", relief=SUNKEN, width=9, height=7,
-                             command=lambda: self.show_page(Cartoons))
+                             command=lambda: self.show_page("cartoons"))
         sidebutton4.grid(row=4, pady=1, padx=5)
 
         #Creating the different frames.
-        self.frames = {}
-        frame = [Home, Anime, Movies, Series, Cartoons, View]
-        for x in frame:
-            frame = x(body)
-            self.frames[x] = frame
-            frame.grid(row=0, sticky=NSEW)   # Places all the frames in the exact location over each other.
-        self.show_page(Home)  # Raises the Home page to the top.
+        self.frames = {"home": Home(body), "anime": Anime(body), "movies": Movies(body),
+                        "series": Series(body), "cartoons": Cartoons(body), "view": View(body)}
+
+
+        frame = Home(body)
+        self.make_frame("home")
+        self.show_page("home")  # Raises the Home page to the top.
+        
+        # Places all the frames in the exact location over each other.
+        for x in ("anime", "movies", "series", "cartoons", "view"):
+            thread = Thread(target=self.make_frame, args=(x,))
+            thread.start()
+    
+    def make_frame(self, frame_name):
+        frame = self.frames[frame_name]
+        frame.grid(row=0, sticky=NSEW)
 
     def show_page(self, page):
         frame = self.frames[page]
@@ -79,7 +90,7 @@ class AniMovieLister(Tk):
     def view_menu(self, category):
         global listbox
         listbox.delete(0, END)
-        self.show_page(View)
+        self.show_page("view")
         listbox.insert(END, f"      {category}")
         number = 1
         for i in view(category):
