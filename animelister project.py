@@ -91,16 +91,16 @@ class AniMovieLister(Tk):
         global listbox
         listbox.delete(0, END)
         self.show_page("view")
-        listbox.insert(END, f"      {category}")
+        listbox.insert(END, f"      {category}      ")
         number = 1
-        for i in view(category):
+        for i in view(category): #This view function is from the backend.py
             listbox.insert(END, f"{number})  {i[1]} ")
             number += 1
 
     def view_all_menu(self):
         global listbox
         listbox.delete(0, END)
-        self.show_page(View)
+        self.show_page("view")
         number = 1
         for i in view_all():
             listbox.insert(END, f"{number})  {i[1]} [{i[2]}]")
@@ -113,6 +113,8 @@ class Home(Frame):
         image = Image.open("images\\GOT.png")
         self.copy = image.copy()
         self.main = ImageTk.PhotoImage(image)
+
+
 
         self.canvas = Canvas(self, width=1050)
         self.canvas.pack(fill=BOTH, expand=TRUE)
@@ -130,25 +132,13 @@ Simply click on one of the tabs on the Sidebar to get started.
 For more help, click on the Help menu on the menu bar.""", fill="#FFCD00", font=("times new roman", 20, "italic"))
 
     def resize(self, event):
-        if event.width > 1000:
-            new_width = event.width
-        else:
-            new_width = 1000
-        if event.height > 600:
-            new_height = event.height
-        else:
-            new_height = 600
+        #
+        width = event.width
+        height = event.height
+        
 
-        if new_width > 1200:
-            x1, x2, y2 = 610, 660, 390
-        else:
-            x1, x2, y2 = 510, 560, 370
-
-        new_image = self.copy.resize((new_width, new_height))
-        self.main = ImageTk.PhotoImage(new_image)
-        self.canvas.itemconfig(self.canvas_image, image=self.main)
-        self.canvas.coords(self.canvas_text1, x1, 150)
-        self.canvas.coords(self.canvas_text2, x2, y2)
+    # Resize the image to fill the canvas
+        self.canvas.itemconfig(self.canvas_image, image=self.main.subsample(min(width/self.main.width(), height/self.main.height())))
 
 
 class Anime(Frame):

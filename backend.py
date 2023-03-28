@@ -52,4 +52,4 @@ def delete(name):
     connection.close()
 
 
-connect()
+connect() #Runs the connect function immediately it is imported and if not existing, creates the database and table.
