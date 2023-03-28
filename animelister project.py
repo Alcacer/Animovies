@@ -120,7 +120,7 @@ class Home(Frame):
         self.canvas.pack(fill=BOTH, expand=TRUE)
         self.canvas.bind("<Configure>", self.resize)
 
-        # Addind the background image and texts to the Canvas.
+        # Adding the background image and texts to the Canvas.
         self.canvas_image = self.canvas.create_image(0, 0, image=self.main, anchor=NW)
 
         self.canvas_text1 = self.canvas.create_text(510, 150, text="""    Welcome to
@@ -141,31 +141,30 @@ For more help, click on the Help menu on the menu bar.""", fill="#FFCD00", font=
         self.canvas.itemconfig(self.canvas_image, image=self.main.subsample(min(width/self.main.width(), height/self.main.height())))
 
 
-class Anime(Frame):
-    def __init__(self, parent):
+class Frames(Frame):
+    def __init__(self, parent, category, image_path):
         Frame.__init__(self, parent, bg="gray")
-        self.category = "Anime"
-        image = Image.open("images\\Naruto.png")
+        image = Image.open(image_path)
         self.copy = image.copy()
         self.image = ImageTk.PhotoImage(image)
         self.canvas = Canvas(self)
         self.canvas.pack(fill=BOTH, expand=TRUE)
         self.canvas.bind("<Configure>", self.resize)
         self.canvas_image = self.canvas.create_image(0, 0, image=self.image, anchor=NW)
-        self.canvas_text1 = self.canvas.create_text(500, 100, text="Anime", font=("Castellar", 50, "italic"),
+        self.canvas_text1 = self.canvas.create_text(500, 100, text=f"{category}", font=("Castellar", 50, "italic"),
                                                     fill="#FFFD00")
         self.canvas_text2 = self.canvas.create_text(500, 250,
-                                                    text="Type in the name of the Anime you wish to save \nand hit "
+                                                    text=f"Type in the name of the {category} you wish to save \nand hit "
                                                          "the Add button. "
-                                                         "\nTo view your saved anime, click on the View menu\non the "
-                                                         "menu bar and select 'View Anime'.",
+                                                         f"\nTo view your saved {category}, click on the View menu\non the "
+                                                         f"menu bar and select 'View {category}'.",
                                                     font=("times new roman", 22, "italic", "bold"), fill="#FFFD00")
-        self.canvas_text3 = self.canvas.create_text(290, 400, text="Name of Anime:",
+        self.canvas_text3 = self.canvas.create_text(290, 400, text=f"Name of {category}:",
                                                     font=("times new roman", 16, "italic", "bold"),
                                                     fill="#FFFD00")
         self.entry_var = StringVar()
         entry = ttk.Entry(self, textvariable=self.entry_var, width=50)
-        button = ttk.Button(self, text="Add Anime", width=25, command=lambda: self.add(""))
+        button = ttk.Button(self, text=f"Add {category}", width=25, command=lambda: self.add(""))
         button.bind("<Return>", self.add)
         self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
         self.canvas_button = self.canvas.create_window(490, 450, window=button)
@@ -200,96 +199,32 @@ class Anime(Frame):
             insert(entry.title(), self.category)
         self.entry_var.set("")
 
-
-class Movies(Anime):
+class Anime(Frames):
     def __init__(self, parent):
-        Frame.__init__(self, parent, bg="gray")
-        self.category = "Movies"
-        image = Image.open("images\\jumanji.png")
-        self.copy = image.copy()
-        self.image = ImageTk.PhotoImage(image)
-        self.canvas = Canvas(self)
-        self.canvas.pack(fill=BOTH, expand=TRUE)
-        self.canvas.bind("<Configure>", self.resize)
-        self.canvas_image = self.canvas.create_image(0, 0, image=self.image, anchor=NW)
-        self.canvas_text1 = self.canvas.create_text(500, 100, text="Movies", font=("Castellar", 50, "italic"),
-                                                    fill="#FFFD00")
-        self.canvas_text2 = self.canvas.create_text(500, 250,
-                                                    text="Type in the name of the Movie you wish to save \nand hit "
-                                                         "the Add button. "
-                                                         "\nTo view your saved movie, click on the View menu\non the "
-                                                         "menu bar and select 'View Movies'.",
-                                                    font=("times new roman", 22, "italic", "bold"), fill="#FFFD00")
-        self.canvas_text3 = self.canvas.create_text(290, 400, text="Name of Movie:",
-                                                    font=("times new roman", 16, "italic", "bold"),
-                                                    fill="#FFCD00")
-        self.entry_var = StringVar()
-        entry = ttk.Entry(self, textvariable=self.entry_var, width=50)
-        button = ttk.Button(self, text="Add Movie", width=25, command=lambda: self.add(""))
-        button.bind("<Return>", self.add)
-        self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
-        self.canvas_button = self.canvas.create_window(490, 450, window=button)
+        category = "Anime"
+        path = "images\\Naruto.png"
+        Frames.__init__(self, parent, category, path)
 
-
-class Series(Anime):
+class Movies(Frames):
     def __init__(self, parent):
-        Frame.__init__(self, parent, bg="gray")
-        self.category = "Series"
-        image = Image.open("images\\money-heist.png")
-        self.copy = image.copy()
-        self.image = ImageTk.PhotoImage(image)
-        self.canvas = Canvas(self)
-        self.canvas.pack(fill=BOTH, expand=TRUE)
-        self.canvas.bind("<Configure>", self.resize)
-        self.canvas_image = self.canvas.create_image(0, 0, image=self.image, anchor=NW)
-        self.canvas_text1 = self.canvas.create_text(500, 100, text="Series", font=("Castellar", 50, "italic"),
-                                                    fill="#FFFD00")
-        self.canvas_text2 = self.canvas.create_text(500, 250,
-                                                    text="Type in the name of the Series you wish to save \nand hit "
-                                                         "the Add button. "
-                                                         "\nTo view your saved series, click on the View menu\non the "
-                                                         "menu bar and select 'View Series'.",
-                                                    font=("times new roman", 22, "italic", "bold"), fill="#FFFD00")
-        self.canvas_text3 = self.canvas.create_text(290, 400, text="Name of Series:",
-                                                    font=("times new roman", 16, "italic", "bold"),
-                                                    fill="#FFFD00")
-        self.entry_var = StringVar()
-        entry = ttk.Entry(self, textvariable=self.entry_var, width=50)
-        button = ttk.Button(self, text="Add Series", width=25, command=lambda: self.add(""))
-        button.bind("<Return>", self.add)
-        self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
-        self.canvas_button = self.canvas.create_window(490, 450, window=button)
+        category = "Movies"
+        path = "images\\jumanji.png"
+        Frames.__init__(self, parent, category, path)
 
 
-class Cartoons(Anime):
+class Series(Frames):
     def __init__(self, parent):
-        Frame.__init__(self, parent, bg="gray")
-        self.category = "Cartoons"
-        image = Image.open("images\\Lion king.png")
-        self.copy = image.copy()
-        self.image = ImageTk.PhotoImage(image)
-        self.canvas = Canvas(self)
-        self.canvas.pack(fill=BOTH, expand=TRUE)
-        self.canvas.bind("<Configure>", self.resize)
-        self.canvas_image = self.canvas.create_image(0, 0, image=self.image, anchor=NW)
-        self.canvas_text1 = self.canvas.create_text(500, 100, text="Cartoons", font=("Castellar", 50, "italic"),
-                                                    fill="#FFFD00")
-        self.canvas_text2 = self.canvas.create_text(500, 250,
-                                                    text="Type in the name of the Cartoon you wish to save \nand hit "
-                                                         "the Add button. "
-                                                         "\nTo view your saved cartoons, click on the View menu\non the "
-                                                         "menu bar and select 'View Cartoons'.",
-                                                    font=("times new roman", 22, "italic", "bold"), fill="#FFFD00")
-        self.canvas_text3 = self.canvas.create_text(290, 400, text="Name of Cartoon:",
-                                                    font=("times new roman", 16, "italic", "bold"),
-                                                    fill="#FFFD00")
-        self.entry_var = StringVar()
-        entry = ttk.Entry(self, textvariable=self.entry_var, width=50)
-        button = ttk.Button(self, text="Add Cartoon", width=25, command=lambda: self.add(""))
-        button.bind("<Return>", self.add)
-        self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
-        self.canvas_button = self.canvas.create_window(490, 450, window=button)
+        category = "Series"
+        path = "images\\money-heist.png"
+        Frames.__init__(self, parent, category, path)
 
+
+class Cartoons(Frames):
+    def __init__(self, parent):
+        category = "Cartoons"
+        path = "images\\Lion king.png"
+        Frames.__init__(self, parent, category, path)
+        
 
 class View(Frame):
     def __init__(self, parent):
