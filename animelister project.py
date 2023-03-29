@@ -165,6 +165,7 @@ class Frames(Frame):
         self.entry_var = StringVar()
         entry = ttk.Entry(self, textvariable=self.entry_var, width=50)
         button = ttk.Button(self, text=f"Add {category}", width=25, command=lambda: self.add(""))
+        entry.bind("<Return>", self.add)
         button.bind("<Return>", self.add)
         self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
         self.canvas_button = self.canvas.create_window(490, 450, window=button)
@@ -197,6 +198,8 @@ class Frames(Frame):
         if len(entry) > 2:
             messagebox.showinfo("Added Successfully", f"{entry.title()} has been added successfully.")
             insert(entry.title(), self.category)
+        else:
+            messagebox.showinfo("Must be more than 2 characters","The entered characters are too short.")
         self.entry_var.set("")
         
 
