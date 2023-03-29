@@ -65,12 +65,13 @@ class AniMovieLister(Tk):
                              command=lambda: self.show_page("cartoons"))
         sidebutton4.grid(row=4, pady=1, padx=5)
 
-        #Creating the different frames.
-        self.frames = {"home": Home(body), "anime": Anime(body), "movies": Movies(body),
-                        "series": Series(body), "cartoons": Cartoons(body), "view": View(body)}
+        #Creating the different frames; The Frames class takes the arguments of the parent, category, and the file path of the image.
+        self.frames = {"home": Home(body), "anime": Frames(body, "Anime", "images\\Naruto.png"), 
+                        "movies": Frames(body, "Movies", "images\\jumanji.png"),
+                        "series": Frames(body, "Series", "images\\money-heist.png"), 
+                        "cartoons": Frames(body, "Cartoons", "images\\Lion king.png"), 
+                        "view": View(body)}
 
-
-        frame = Home(body)
         self.make_frame("home")
         self.show_page("home")  # Raises the Home page to the top.
         
@@ -93,7 +94,7 @@ class AniMovieLister(Tk):
         self.show_page("view")
         listbox.insert(END, f"      {category}      ")
         number = 1
-        for i in view(category): #This view function is from the backend.py
+        for i in view(category): #This view function is from the backend.py file.
             listbox.insert(END, f"{number})  {i[1]} ")
             number += 1
 
@@ -115,7 +116,6 @@ class Home(Frame):
         self.main = ImageTk.PhotoImage(image)
 
 
-
         self.canvas = Canvas(self, width=1050)
         self.canvas.pack(fill=BOTH, expand=TRUE)
         self.canvas.bind("<Configure>", self.resize)
@@ -132,7 +132,7 @@ Simply click on one of the tabs on the Sidebar to get started.
 For more help, click on the Help menu on the menu bar.""", fill="#FFCD00", font=("times new roman", 20, "italic"))
 
     def resize(self, event):
-        #
+        
         width = event.width
         height = event.height
         
@@ -154,12 +154,12 @@ class Frames(Frame):
         self.canvas_text1 = self.canvas.create_text(500, 100, text=f"{category}", font=("Castellar", 50, "italic"),
                                                     fill="#FFFD00")
         self.canvas_text2 = self.canvas.create_text(500, 250,
-                                                    text=f"Type in the name of the {category} you wish to save \nand hit "
+                                                    text=f"Type in the name of the {category.lower()} you wish to save \nand hit "
                                                          "the Add button. "
-                                                         f"\nTo view your saved {category}, click on the View menu\non the "
+                                                         f"\nTo view your saved {category.lower()}, click on the View menu\non the "
                                                          f"menu bar and select 'View {category}'.",
                                                     font=("times new roman", 22, "italic", "bold"), fill="#FFFD00")
-        self.canvas_text3 = self.canvas.create_text(290, 400, text=f"Name of {category}:",
+        self.canvas_text3 = self.canvas.create_text(290, 400, text=f"Name of the {category}:  ",
                                                     font=("times new roman", 16, "italic", "bold"),
                                                     fill="#FFFD00")
         self.entry_var = StringVar()
@@ -198,32 +198,6 @@ class Frames(Frame):
             messagebox.showinfo("Added Successfully", f"{entry.title()} has been added successfully.")
             insert(entry.title(), self.category)
         self.entry_var.set("")
-
-class Anime(Frames):
-    def __init__(self, parent):
-        category = "Anime"
-        path = "images\\Naruto.png"
-        Frames.__init__(self, parent, category, path)
-
-class Movies(Frames):
-    def __init__(self, parent):
-        category = "Movies"
-        path = "images\\jumanji.png"
-        Frames.__init__(self, parent, category, path)
-
-
-class Series(Frames):
-    def __init__(self, parent):
-        category = "Series"
-        path = "images\\money-heist.png"
-        Frames.__init__(self, parent, category, path)
-
-
-class Cartoons(Frames):
-    def __init__(self, parent):
-        category = "Cartoons"
-        path = "images\\Lion king.png"
-        Frames.__init__(self, parent, category, path)
         
 
 class View(Frame):
