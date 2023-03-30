@@ -75,9 +75,9 @@ class AniMovieLister(Tk):
         self.make_frame("home")
         self.show_page("home")  # Raises the Home page to the top.
         
-        # Places all the frames in the exact location over each other.
+        # Threads are employed to concurrently load the other frames in the background.
         for x in ("anime", "movies", "series", "cartoons", "view"):
-            thread = Thread(target=self.make_frame, args=(x,))
+            thread = Thread(target=self.make_frame, args=(x,)) #Remember the args argument takes a tuple, hence the comma.
             thread.start()
     
     def make_frame(self, frame_name):
@@ -112,13 +112,11 @@ class Home(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
         image = Image.open("images\\GOT.png")
-        self.copy = image.copy()
         self.main = ImageTk.PhotoImage(image)
 
 
         self.canvas = Canvas(self, width=1050)
         self.canvas.pack(fill=BOTH, expand=TRUE)
-        self.canvas.bind("<Configure>", self.resize)
 
         # Adding the background image and texts to the Canvas.
         self.canvas_image = self.canvas.create_image(0, 0, image=self.main, anchor=NW)
@@ -131,25 +129,14 @@ Series and Cartoons or new interesting ones that you want to make sure you watch
 Simply click on one of the tabs on the Sidebar to get started. 
 For more help, click on the Help menu on the menu bar.""", fill="#FFCD00", font=("times new roman", 20, "italic"))
 
-    def resize(self, event):
-        
-        width = event.width
-        height = event.height
-        
-
-    # Resize the image to fill the canvas
-        self.canvas.itemconfig(self.canvas_image, image=self.main.subsample(min(width/self.main.width(), height/self.main.height())))
-
 
 class Frames(Frame):
     def __init__(self, parent, category, image_path):
         Frame.__init__(self, parent, bg="gray")
         image = Image.open(image_path)
-        self.copy = image.copy()
         self.image = ImageTk.PhotoImage(image)
         self.canvas = Canvas(self)
         self.canvas.pack(fill=BOTH, expand=TRUE)
-        self.canvas.bind("<Configure>", self.resize)
         self.canvas_image = self.canvas.create_image(0, 0, image=self.image, anchor=NW)
         self.canvas_text1 = self.canvas.create_text(500, 100, text=f"{category}", font=("Castellar", 50, "italic"),
                                                     fill="#FFFD00")
@@ -170,35 +157,14 @@ class Frames(Frame):
         self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
         self.canvas_button = self.canvas.create_window(490, 450, window=button)
 
-    def resize(self, event):
-        if event.width > 1080:
-            new_width = event.width
-        else:
-            new_width = 1080
-        if event.height > 600:
-            new_height = event.height
-        else:
-            new_height = 600
-
-        if new_width > 1200:
-            x1, x2, x3, x4, x5 = 610, 640, 420, 650, 640
-        else:
-            x1, x2, x3, x4, x5 = 500, 500, 300, 530, 500
-        image = self.copy.resize((new_width, new_height))
-        self.image = ImageTk.PhotoImage(image)
-        self.canvas.itemconfig(self.canvas_image, image=self.image)
-        self.canvas.coords(self.canvas_text1, x1, 100)
-        self.canvas.coords(self.canvas_text2, x2, 250)
-        self.canvas.coords(self.canvas_text3, x3, 400)
-        self.canvas.coords(self.canvas_entry, x4, 401)
-        self.canvas.coords(self.canvas_button, x5, 450)
-
     def add(self, event):
         entry = self.entry_var.get()  # Gets the content of the Entry box typed in by the user.
-        if len(entry) > 2:
+        if len(entry.strip()) > 2:
             messagebox.showinfo("Added Successfully", f"{entry.title()} has been added successfully.")
             insert(entry.title(), self.category)
-        else:
+        elif len(entry.strip()) < 1:
+            pass
+        else :
             messagebox.showinfo("Must be more than 2 characters","The entered characters are too short.")
         self.entry_var.set("")
         
@@ -208,11 +174,9 @@ class View(Frame):
         Frame.__init__(self, parent)
         global listbox
         image = Image.open("Images\\John Wick.png")
-        self.copy = image.copy()
         self.main = ImageTk.PhotoImage(image)
         self.canvas = Canvas(self)
         self.canvas.pack(fill=BOTH, expand=TRUE)
-        self.canvas.bind("<Configure>", self.rescale)
 
         self.canvas.create_image(0, 0, image=self.main, anchor=NW)
         self.canvas_text1 = self.canvas.create_text(500, 50, text="View", font=("Castellar", 50, "italic"),
@@ -249,21 +213,6 @@ class View(Frame):
                 messagebox.showinfo("No Search Results", f"Sorry, Couldn't find what you were looking for.")
             self.entryvar.set("")
 
-    def rescale(self, event):
-        if event.width > 1200:
-            x1, x2, x3, x4, x5, x6, x7 = 650, 650, 550, 800, 600, 902, 580
-            y1, y2, y3, y4, y5, y6, y7 = 90, 190, 271, 270, 460, 460, 630
-        else:
-            x1, x2, x3, x4, x5, x6, x7 = 500, 500, 400, 650, 450, 742, 430
-            y1, y2, y3, y4, y5, y6, y7 = 50, 130, 206, 205, 380, 380, 550
-        self.canvas.coords(self.canvas_text1, x1, y1)
-        self.canvas.coords(self.canvas_text2, x2, y2)
-        self.canvas.coords(self.canvas_entry, x3, y3)  # Changes the coordinates of the widgets when resized.
-        self.canvas.coords(self.canvas_button, x4, y4)
-        self.canvas.coords(self.canvas_listbox, x5, y5)
-        self.canvas.coords(self.canvas_scrollbar, x6, y6)
-        self.canvas.coords(self.del_button, x7, y7)
-
     def delete_item(self):
         try:
             index = listbox.curselection()[0]  # Gets the active row in the listbox
@@ -290,4 +239,6 @@ class View(Frame):
 app = AniMovieLister()
 app.title("AniMovie Lister")
 app.iconbitmap("images\\favicon.ico")
+app.maxsize(1200,600)
+app.minsize(1080,610)
 app.mainloop()
