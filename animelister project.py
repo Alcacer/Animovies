@@ -239,6 +239,6 @@ class View(Frame):
 app = AniMovieLister()
 app.title("AniMovie Lister")
 app.iconbitmap("images\\favicon.ico")
-app.maxsize(1200,600)
-app.minsize(1080,610)
+app.maxsize(1160,605)
+app.minsize(1160,605)
 app.mainloop()
