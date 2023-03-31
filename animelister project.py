@@ -122,8 +122,7 @@ class Home(Frame):
         # Adding the background image and texts to the Canvas.
         self.canvas_image = self.canvas.create_image(0, 0, image=self.main, anchor=NW)
 
-        self.canvas_text1 = self.canvas.create_text(510, 150, text="""    Welcome to
-AniMovie Lister""", font=("Castellar", 50, "italic"), fill="gold")
+        self.canvas_text1 = self.canvas.create_text(510, 150, text="""    Welcome to\n  AniMovie Lister""", font=("Castellar", 50, "italic"), fill="gold")
 
         self.canvas_text2 = self.canvas.create_text(560, 370, text="""Welcome to AniMovie Lister. Store the names of your favorite Anime, Movies,
 Series and Cartoons or new interesting ones that you want to make sure you watch.
@@ -207,17 +206,21 @@ class View(Frame):
 
     def search_box(self, event):
         if len(self.entryvar.get().strip()) > 0:
-            listbox.delete(0, END)
             number = 1
-            for x in search(self.entryvar.get().title().strip()):
-                listbox.insert(END, f"{number})  {x[1]}   {{{x[2]}}}")
-                number += 1
-            if listbox.index(END) == 0:
+            search_results = search(self.entryvar.get().strip().title())
+            if len(search_results) > 0:
+                for x in search_results:
+                    listbox.delete(0, END)
+                    listbox.insert(END, f"{number})  {x[1]}   {{{x[2]}}}")
+                    number += 1
+                    self.entryvar.set("")
+            else:
                 messagebox.showinfo("No Search Results", f"Sorry, Couldn't find what you were looking for.")
+            
 
     def delete_item(self):
         try:
-            index = listbox.curselection()[0]  # Gets the active row in the listbox
+            index = listbox.curselection()[0]  # Gets the index of the active row in the listbox
             selected_row = listbox.get(index)  # Gets the content of the active row
             name = []
             for x in selected_row[4:]:
@@ -232,7 +235,7 @@ class View(Frame):
                 delete(full_name)
                 messagebox.showinfo("Deleted!", f"{full_name} has been deleted")
                 listbox.delete(index)
-                self.entryvar.set("")
+
         except IndexError:
             pass
         except ValueError:
@@ -245,5 +248,4 @@ app.title("AniMovie Lister")
 app.iconbitmap("Images\\app.ico")
 app.maxsize(1160,605)
 app.minsize(1160,605)
-
 app.mainloop()
