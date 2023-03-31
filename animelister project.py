@@ -154,7 +154,7 @@ class Frames(Frame):
         button = ttk.Button(self, text=f"Add {category}", width=25, command=lambda: self.add(""))
         entry.bind("<Return>", self.add)
         button.bind("<Return>", self.add)
-        self.canvas_entry = self.canvas.create_window(520, 401, window=entry)
+        self.canvas_entry = self.canvas.create_window(535, 401, window=entry)
         self.canvas_button = self.canvas.create_window(490, 450, window=button)
 
     def add(self, event):
@@ -179,34 +179,34 @@ class View(Frame):
         self.canvas.pack(fill=BOTH, expand=TRUE)
 
         self.canvas.create_image(0, 0, image=self.main, anchor=NW)
-        self.canvas_text1 = self.canvas.create_text(500, 50, text="View", font=("Castellar", 50, "italic"),
+        self.canvas_text1 = self.canvas.create_text(400, 50, text="View", font=("Castellar", 40, "italic"),
                                                     fill="yellow")
-        self.canvas_text2 = self.canvas.create_text(500, 150,
+        self.canvas_text2 = self.canvas.create_text(400, 130,
                                                     text="View your saved videos and delete the ones you've \nwatched "
                                                          "by clicking and hitting the Delete button. Also, \n"
                                                          "search for a specific video by typing into the search box.",
-                                                    font=("times new roman", 22, "italic", "bold"), fill="yellow")
+                                                    font=("times new roman", 18, "italic", "bold"), fill="yellow")
         self.entryvar = StringVar()
-        entry = ttk.Entry(self, textvariable=self.entryvar, width=46, font=("Arial", 12, "bold"))
+        entry = ttk.Entry(self, textvariable=self.entryvar, width=40, font=("Helvetica", 12, "italic"))
         entry.bind("<Return>", self.search_box)
-        button = ttk.Button(self, text="Search", command=lambda: self.search_box(""))
-        listbox = Listbox(self, width=60, height=12, font=("comic sans ms", 13, "italic"))
+        search_button = ttk.Button(self, text="Search", command=lambda: self.search_box(""))
+        listbox = Listbox(self, width=40, height=12, font=("comic sans ms", 13, "italic"))
         scroll = ttk.Scrollbar(self)
         listbox.configure(yscrollcommand=scroll.set)
         scroll.configure(command=listbox.yview)
         del_button = ttk.Button(self, text="Delete", width=25, command=self.delete_item)
 
-        self.canvas_entry = self.canvas.create_window(400, 231, window=entry)
-        self.canvas_button = self.canvas.create_window(650, 230, window=button)
-        self.canvas_listbox = self.canvas.create_window(450, 420, window=listbox)
-        self.canvas_scrollbar = self.canvas.create_window(742, 420, window=scroll, height=300)
-        self.del_button = self.canvas.create_window(430, 530, window=del_button)
+        self.canvas_entry = self.canvas.create_window(350, 215, window=entry)
+        self.canvas_button = self.canvas.create_window(572, 215, window=search_button)
+        self.canvas_listbox = self.canvas.create_window(380, 390, window=listbox)
+        self.canvas_scrollbar = self.canvas.create_window(591, 390, window=scroll, height=305)
+        self.del_button = self.canvas.create_window(380, 560, window=del_button)
 
     def search_box(self, event):
-        if len(self.entryvar.get()) > 0:
+        if len(self.entryvar.get().strip()) > 0:
             listbox.delete(0, END)
             number = 1
-            for x in search(self.entryvar.get().title()):
+            for x in search(self.entryvar.get().title().strip()):
                 listbox.insert(END, f"{number})  {x[1]} [{x[2]}]")
                 number += 1
             if listbox.index(END) == 0:
