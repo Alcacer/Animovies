@@ -134,6 +134,7 @@ class Frames(Frame):
     def __init__(self, parent, category, image_path):
         Frame.__init__(self, parent, bg="gray")
         image = Image.open(image_path)
+        self.category = category
         self.image = ImageTk.PhotoImage(image)
         self.canvas = Canvas(self)
         self.canvas.pack(fill=BOTH, expand=TRUE)
