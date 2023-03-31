@@ -104,7 +104,7 @@ class AniMovieLister(Tk):
         self.show_page("view")
         number = 1
         for i in view_all():
-            listbox.insert(END, f"{number})  {i[1]} [{i[2]}]")
+            listbox.insert(END, f"{number})  {i[1]} {{{i[2]}}}")
             number += 1
 
 
@@ -190,6 +190,7 @@ class View(Frame):
         entry = ttk.Entry(self, textvariable=self.entryvar, width=40, font=("Helvetica", 12, "italic"))
         entry.bind("<Return>", self.search_box)
         search_button = ttk.Button(self, text="Search", command=lambda: self.search_box(""))
+        search_button.bind("<Return>", self.search_box)
         listbox = Listbox(self, width=40, height=12, font=("comic sans ms", 13, "italic"))
         scroll = ttk.Scrollbar(self)
         listbox.configure(yscrollcommand=scroll.set)
@@ -207,7 +208,7 @@ class View(Frame):
             listbox.delete(0, END)
             number = 1
             for x in search(self.entryvar.get().title().strip()):
-                listbox.insert(END, f"{number})  {x[1]} [{x[2]}]")
+                listbox.insert(END, f"{number})  {x[1]}   {{{x[2]}}}")
                 number += 1
             if listbox.index(END) == 0:
                 messagebox.showinfo("No Search Results", f"Sorry, Couldn't find what you were looking for.")
@@ -219,7 +220,7 @@ class View(Frame):
             selected_row = listbox.get(index)  # Gets the content of the active row
             name = []
             for x in selected_row[4:]:
-                if x == "[":
+                if x == "{":
                     break
                 else:
                     name.append(x)
