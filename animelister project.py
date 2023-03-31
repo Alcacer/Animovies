@@ -14,7 +14,7 @@ class AniMovieLister(Tk):
         menu = Menu(self)
         self.config(menu=menu)
 
-        file = Menu(menu, tearoff=0)
+        file = Menu(menu, tearoff=0) 
         file.add_command(label="Exit", command=self.destroy)
         menu.add_cascade(label="File", menu=file)
 
@@ -58,6 +58,7 @@ class AniMovieLister(Tk):
         sidebutton2 = Button(sidebar, text="Movies", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("movies"))
         sidebutton2.grid(row=2, pady=2, padx=5)
+
         sidebutton3 = Button(sidebar, text="Series", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("series"))
         sidebutton3.grid(row=3, pady=2, padx=5)
@@ -122,12 +123,12 @@ class Home(Frame):
         self.canvas_image = self.canvas.create_image(0, 0, image=self.main, anchor=NW)
 
         self.canvas_text1 = self.canvas.create_text(510, 150, text="""    Welcome to
-AniMovie Lister""", font=("Castellar", 50, "italic"), fill="#FFCD00")
+AniMovie Lister""", font=("Castellar", 50, "italic"), fill="gold")
 
         self.canvas_text2 = self.canvas.create_text(560, 370, text="""Welcome to AniMovie Lister. Store the names of your favorite Anime, Movies,
 Series and Cartoons or new interesting ones that you want to make sure you watch.
 Simply click on one of the tabs on the Sidebar to get started. 
-For more help, click on the Help menu on the menu bar.""", fill="#FFCD00", font=("times new roman", 20, "italic"))
+For more help, click on the Help menu on the menu bar.""", fill="gold", font=("times new roman", 20, "italic"))
 
 
 class Frames(Frame):
@@ -161,8 +162,8 @@ class Frames(Frame):
     def add(self, event):
         entry = self.entry_var.get()  # Gets the content of the Entry box typed in by the user.
         if len(entry.strip()) > 2:
-            messagebox.showinfo("Added Successfully", f"{entry.title()} has been added successfully.")
-            insert(entry.title(), self.category)
+            messagebox.showinfo("Added Successfully", f"{entry.title().strip()} has been added successfully.")
+            insert(entry.title().strip(), self.category)
         elif len(entry.strip()) < 1:
             pass
         else :
@@ -213,7 +214,6 @@ class View(Frame):
                 number += 1
             if listbox.index(END) == 0:
                 messagebox.showinfo("No Search Results", f"Sorry, Couldn't find what you were looking for.")
-            self.entryvar.set("")
 
     def delete_item(self):
         try:
@@ -232,10 +232,12 @@ class View(Frame):
                 delete(full_name)
                 messagebox.showinfo("Deleted!", f"{full_name} has been deleted")
                 listbox.delete(index)
+                self.entryvar.set("")
         except IndexError:
             pass
         except ValueError:
             pass
+
 
 
 app = AniMovieLister()
@@ -243,4 +245,5 @@ app.title("AniMovie Lister")
 app.iconbitmap("Images\\app.ico")
 app.maxsize(1160,605)
 app.minsize(1160,605)
+
 app.mainloop()
