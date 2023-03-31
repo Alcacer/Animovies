@@ -51,19 +51,19 @@ class AniMovieLister(Tk):
         # Adding the tabs to the Sidebar
         sidebutton0 = Button(sidebar, text="Home", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("home"))
-        sidebutton0.grid(row=0, pady=1, padx=5)
+        sidebutton0.grid(row=0, pady=3, padx=5)
         sidebutton1 = Button(sidebar, text="Anime", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("anime"))
-        sidebutton1.grid(row=1, pady=1, padx=5)
+        sidebutton1.grid(row=1, pady=2, padx=5)
         sidebutton2 = Button(sidebar, text="Movies", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("movies"))
-        sidebutton2.grid(row=2, pady=1, padx=5)
+        sidebutton2.grid(row=2, pady=2, padx=5)
         sidebutton3 = Button(sidebar, text="Series", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("series"))
-        sidebutton3.grid(row=3, pady=1, padx=5)
+        sidebutton3.grid(row=3, pady=2, padx=5)
         sidebutton4 = Button(sidebar, text="Cartoons", bg="gray", relief=SUNKEN, width=9, height=7,
                              command=lambda: self.show_page("cartoons"))
-        sidebutton4.grid(row=4, pady=1, padx=5)
+        sidebutton4.grid(row=4, pady=2, padx=5)
 
         #Creating the different frames; The Frames class takes the arguments of the parent, category, and the file path of the image.
         self.frames = {"home": Home(body), "anime": Frames(body, "Anime", "images\\Naruto.png"), 
@@ -238,7 +238,7 @@ class View(Frame):
 
 app = AniMovieLister()
 app.title("AniMovie Lister")
-app.iconbitmap("images\\favicon.ico")
+app.iconbitmap("Images\\app.ico")
 app.maxsize(1160,605)
 app.minsize(1160,605)
 app.mainloop()
