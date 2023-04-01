@@ -115,7 +115,6 @@ class Home(Frame):
         image = Image.open("images\\GOT.png")
         self.main = ImageTk.PhotoImage(image)
 
-
         self.canvas = Canvas(self, width=1050)
         self.canvas.pack(fill=BOTH, expand=TRUE)
 
